@@ -1,33 +1,9 @@
 #!/usr/bin/env python3
-'''Field list and some functions for upload script. This file and must be
+'''Field list for Clever This file and must be
 in the same folder as the uploadClever.py file for it to function.
 Running this alone prints a list of all field lists in the file to the terminal.
 '''
 
-
-def gradesNoEmail(grade):
-    emailOff = ['TK','K','1','2','3','4','5','6']
-    if grade in emailOff:
-        return True
-    return False
-
-
-def schoolLevels():
-    schoolsDict = {'Lower School':'LS','Middle School':'MS', 'Upper School':'US', \
-    'All School':'AS'}
-    return schoolsDict
-
-
-def gradeLevels():
-    gradesDict = {'Grade 12':12, 'Grade 11':11, 'Grade 10':10, 'Grade 9':9, \
-    'Grade 8':8, 'Grade 7':7, 'Grade 6':6, 'Grade 5':5, 'Grade 4':4, \
-    'Grade 3':3, 'Grade 2':2, 'Grade 1':1, 'TK':'Prekindergarten', \
-    'Kindergarten':'Kindergarten'}
-    return gradesDict
-
-
-'''Fields for Clever script
-'''
 def schoolsFieldsC():
     #Required: 'School_id', 'School_name', 'School_number'
     fields = ['School_id', 'School_name', 'School_number',
