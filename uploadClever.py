@@ -18,9 +18,6 @@ from sys import argv
 from pathlib import Path
 from getpass import getuser
 from collections import defaultdict
-'''The files renameExports.py and fieldList.py must be in the same 
-directory as the uploadClever.py script for it to function properly.
-'''
 from renameExports import vcFiles
 #Import the fieldnames for the export files.
 from fieldList import studentsFieldsC as fstudents
@@ -31,7 +28,8 @@ from fieldList import enrollmentsFieldsC as fenrollments
 from fieldList import schoolsFieldsC as fschools
 from fieldList import schoolLevels
 from fieldList import gradeLevels
-from fieldList import gradesNoEmail
+#Domain for school email system
+domain = '@tsdch.org'
 
 
 def createStudents(inFile, outFile, divisions, gradeNumber):
@@ -44,6 +42,13 @@ def createStudents(inFile, outFile, divisions, gradeNumber):
         writer.writeheader()
         #Output data to the file for all users.
         for row in reader:
+            # Confirm student email is in the school domain
+            if domain in row['Email 1']:
+                sEmail = row['Email 1']
+            elif domain in row['Email 2']:
+                sEmail = row['Email 2']
+            else:
+                continue
             new = defaultdict(dict)
             new['School_id'] = divisions[row['School Level']]
             new['Student_id'] = row['Person ID']
@@ -66,10 +71,6 @@ def createStudents(inFile, outFile, divisions, gradeNumber):
             new['Student_city'] = ''
             new['Student_state'] = ''
             new['Student_zip'] = ''
-            if gradesNoEmail(row['Grade']):
-                sEmail = row['Email 2']
-            else:
-                sEmail = row['Email 1']
             new['Student_email'] = sEmail
             new['Contact_relationship'] = ''
             new['Contact_type'] = ''
@@ -214,7 +215,7 @@ def createEnrollments(inFile, outFile, divisions, gradeNumber):
 
 
 def main():
-    vcFiles() #Eliminate this if manually naming/moving VC exports
+    vcFiles()
     print()
     inputs = Path(f'downloads')
     results = Path('uploadClever')
