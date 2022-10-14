@@ -18,6 +18,9 @@ from sys import argv
 from pathlib import Path
 from getpass import getuser
 from collections import defaultdict
+'''The files renameExports.py and fieldList.py must be in the same 
+directory as the uploadClever.py script for it to function properly.
+'''
 from renameExports import vcFiles
 #Import the fieldnames for the export files.
 from fieldList import studentsFieldsC as fstudents
@@ -211,7 +214,7 @@ def createEnrollments(inFile, outFile, divisions, gradeNumber):
 
 
 def main():
-    vcFiles()
+    vcFiles() #Eliminate this if manually naming/moving VC exports
     print()
     inputs = Path(f'downloads')
     results = Path('uploadClever')
