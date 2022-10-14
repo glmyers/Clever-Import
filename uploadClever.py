@@ -26,10 +26,22 @@ from fieldList import adminsFieldsC as fadmins
 from fieldList import sectionsFieldsC as fsections
 from fieldList import enrollmentsFieldsC as fenrollments
 from fieldList import schoolsFieldsC as fschools
-from fieldList import schoolLevels
-from fieldList import gradeLevels
 #Domain for school email system
 domain = '@tsdch.org'
+
+
+def schoolLevels():
+    schoolsDict = {'Lower School':'LS','Middle School':'MS', 'Upper School':'US', \
+    'All School':'AS'}
+    return schoolsDict
+
+
+def gradeLevels():
+    gradesDict = {'Grade 12':12, 'Grade 11':11, 'Grade 10':10, 'Grade 9':9, \
+    'Grade 8':8, 'Grade 7':7, 'Grade 6':6, 'Grade 5':5, 'Grade 4':4, \
+    'Grade 3':3, 'Grade 2':2, 'Grade 1':1, 'TK':'Prekindergarten', \
+    'Kindergarten':'Kindergarten'}
+    return gradesDict
 
 
 def createStudents(inFile, outFile, divisions, gradeNumber):
