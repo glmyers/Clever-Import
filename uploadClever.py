@@ -132,7 +132,7 @@ def createAdmins(inFile, outFile, divisions, gradeNumber):
             new['Admin_title'] = row['Job Title']
             new['Username'] = ''
             new['Password'] = ''
-            new['Role'] = row['Role']
+            new['Role'] = row['Profile Code']
             writer.writerow(new)
     return
 
