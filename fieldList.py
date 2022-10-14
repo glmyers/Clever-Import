@@ -117,32 +117,32 @@ field lists to the terminal windowself.
 def main():
     #Prints the field list for Clever to the terminal window one per line.
     print('Clever fields Schools File:')
-    print("")
+    print("Required: 'School_id', 'School_name', 'School_number'")
     for field in schoolsFieldsC():
         print(field)
     print()
     print('Clever fields Students File:')
-    print("")
+    print("Required: 'School_id', 'Student_id', 'First_name', 'Last_name'")
     for field in studentsFieldsC():
         print(field)
     print()
     print('Clever fields Teachers File:')
-    print("")
+    print("Required: 'School_id', 'Teacher_id', 'First_name', 'Last_name'")
     for field in teachersFieldsC():
         print(field)
     print()
     print('Clever fields Admins File:')
-    print("")
+    print("Required: 'School_id', 'Staff_id', 'Admin_email', 'First_name', 'Last_name'")
     for field in adminsFieldsC():
         print(field)
     print()
     print('Clever fields Sections File:')
-    print("")
+    print("Required: 'School_id', 'Section_id', 'Teacher_id'")
     for field in sectionsFieldsC():
         print(field)
     print()
     print('Clever fields Enrollments File:')
-    print("")
+    print("Required: 'School_id', 'Section_id', 'Student_id'")
     for field in enrollmentsFieldsC():
         print(field)
     print()
