@@ -20,7 +20,7 @@ from shutil import move
 from pathlib import Path
 
 # Function to rename and move multiple CSV files exported from Veracross
-def vcFiles():
+def vcxFiles():
     print()
     if not Path('downloads').is_dir():
         makedirs('downloads')
@@ -37,7 +37,7 @@ def vcFiles():
         print()
 
 def main():
-    vcFiles()
+    vcxFiles()
     return
 
 
