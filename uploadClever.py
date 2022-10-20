@@ -19,7 +19,7 @@ from pathlib import Path
 from getpass import getuser
 from collections import defaultdict
 #Function to rename and move Veracross CSV exports.
-from renameExports import vcFiles
+from renameExports import vcxFiles
 #Import the fieldnames for the export files.
 from fieldList import studentsFieldsC as fstudents
 from fieldList import teachersFieldsC as fteachers
@@ -228,7 +228,7 @@ def createEnrollments(inFile, outFile, divisions, gradeNumber):
 
 
 def main():
-    vcFiles()
+    vcxFiles()
     print()
     inputs = Path(f'downloads')
     results = Path('uploadClever')
