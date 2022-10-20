@@ -240,7 +240,7 @@ def main():
     sourceAdmins = f'{inputs}/adminsC.csv'
     sourceSections = f'{inputs}/sectionsC.csv'
     sourceRosters = f'{inputs}/enrollmentsC.csv'
-    #CSV files for upload into Apple School Manager
+    #CSV files for upload into Clever
     resultStudents = f'{results}/students.csv'
     resultTeachers = f'{results}/teachers.csv'
     resultAdmins = f'{results}/admins.csv'
