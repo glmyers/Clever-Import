@@ -9,7 +9,7 @@ The 'domain' global variable located under the import statements is used to mana
 * __''__ causes Email 1 to be used regardless of the contents of the field.
 
 ## Veracross export files
-The script expects five CSV export files from the Veracross school information system in a folder named "downloads" in the current working directory. The 'renameExports.py' script will move exported CSV files from the Downloads in the user's home directory (*if exports are located elsewhere, simply edit the variable __sourceFolder__ in 'renameExports.py'*) into the correct folder in the working directory while also striping off the information appeded to query names when downloading CSV files.   
+The script expects five CSV export files from the Veracross school information system in a folder named "downloads" in the current working directory. The 'renameExports.py' script will move exported CSV files from the Downloads in the user's home directory (*if exports are located elsewhere, simply edit the variable __sourceFolder__ in 'renameExports.py'*) into the correct folder in the working directory while also striping off the information appeded to query names when downloading CSV files. The students query include weighted and unweighted gpa calculation that are not used in the code as posted here on github so you will want to uncheck those before running the query, or update the code to include gpa.  
 * adminsC.csv - (*from an export Find Staff/Faculty query using a Profile Code to distinguish addmins 328516*)
 * enrollmentsC.csv - (*from an export of a Find Class Enrollment Records query 325696*)
 * sectionsC.csv - (*from an export of a Class Permission query 325726*)
