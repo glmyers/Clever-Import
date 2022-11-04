@@ -29,6 +29,10 @@ from fieldList import enrollmentsFieldsC as fenrollments
 from fieldList import schoolsFieldsC as fschools
 #Domain for school email system
 domain = '@tsdch.org'
+# List of Person IDs of students who temporaroly are without parents..
+noParents = ['']
+# List of Person IDs of teachers with role "Other" that actually teach the class.
+multiTeacher = ['']
 
 
 def schoolLevels():
@@ -44,6 +48,16 @@ def gradeLevels():
     'Kindergarten':'Kindergarten'}
     return gradesDict
 
+'''
+def createSchools(inFile, outFile, divisions, gradeNumber):
+    with open(inFile, 'r') as dataIn, open(outFile, 'w') as dataOut:
+        reader = csv.DictReader(dataIn)
+        writer = csv.DictWriter(dataOut, fieldnames=fschools(),
+                                quoting=csv.QUOTE_MINIMAL)
+        #Put the header row of fields at the top of the output file.
+        writer.writeheader()
+    return
+'''
 
 def createStudents(inFile, outFile, divisions, gradeNumber):
     #Create a CSV export file by processing the existing data files.
@@ -62,41 +76,49 @@ def createStudents(inFile, outFile, divisions, gradeNumber):
                 sEmail = row['Email 2']
             else:
                 continue
-            new = defaultdict(dict)
-            new['School_id'] = divisions[row['School Level']]
-            new['Student_id'] = row['Person ID']
-            new['Student_number'] = row['Person ID']
-            new['State_id'] = ''
-            new['Last_name'] = row['Last Name']
-            new['Middle_name'] = row['Middle Name']
-            new['First_name'] = row['First Nick Name']
-            new['Grade'] = gradeNumber[row['Current Grade']]
-            new['Gender'] = row['Gender']
-            new['Graduation_year'] = row['Graduation Year']
-            new['DOB'] = row['Birthday']
-            new['Race'] = ''
-            new['Hispanic_Latino'] = ''
-            new['Home_language'] = ''
-            new['Ell_status'] = ''
-            new['Frl_status'] = ''
-            new['IEP_status'] = ''
-            new['Student_street'] = ''
-            new['Student_city'] = ''
-            new['Student_state'] = ''
-            new['Student_zip'] = ''
-            new['Student_email'] = sEmail
-            new['Contact_relationship'] = ''
-            new['Contact_type'] = ''
-            new['Contact_name'] = ''
-            new['Contact_phone'] = ''
-            new['Contact_phone_type'] = ''
-            new['Contact_email'] = ''
-            new['Contact_sis_id'] = ''
-            new['Username'] = ''
-            new['Password'] = ''
-            new['Unweighted_gpa'] = ''
-            new['Weighted_gpa'] = ''
-            writer.writerow(new)
+            x = 0
+            while x < 4:
+                x += 1
+                if row[f'Parent {x} Relationship'] == '':
+                    if row['Person ID'] in noParents:
+                        x = 4
+                    else:
+                        break
+                new = defaultdict(dict)
+                new['School_id'] = divisions[row['School Level']]
+                new['Student_id'] = row['Person ID']
+                new['Student_number'] = row['Person ID']
+                new['State_id'] = ''
+                new['Last_name'] = row['Last Name']
+                new['Middle_name'] = row['Middle Name']
+                new['First_name'] = row['First Nick Name']
+                new['Grade'] = gradeNumber[row['Current Grade']]
+                new['Gender'] = row['Gender']
+                new['Graduation_year'] = row['Graduation Year']
+                new['DOB'] = row['Birthday']
+                new['Race'] = ''
+                new['Hispanic_Latino'] = ''
+                new['Home_language'] = ''
+                new['Ell_status'] = ''
+                new['Frl_status'] = ''
+                new['IEP_status'] = ''
+                new['Student_street'] = row['Address 1']
+                new['Student_city'] = row['City']
+                new['Student_state'] = row['State']
+                new['Student_zip'] = row['Zip (5-digit)']
+                new['Student_email'] = sEmail
+                new['Contact_relationship'] = row[f'Parent {x} Relationship']
+                new['Contact_type'] = 'Family'
+                new['Contact_name'] = f"{row[f'PARENT {x}: First Nick Name']} {row[f'PARENT {x}: Last Name']}"
+                new['Contact_phone'] = row[f'PARENT {x}: Mobile Phone']
+                new['Contact_phone_type'] = 'Cell'
+                new['Contact_email'] = row[f'PARENT {x}: Email 1']
+                new['Contact_sis_id'] = row[f'PARENT {x}: Person ID']
+                new['Username'] = ''
+                new['Password'] = ''
+                new['Unweighted_gpa'] = row['GPA']
+                new['Weighted_gpa'] = row['WGPA']
+                writer.writerow(new)
     return
 
 
@@ -111,12 +133,19 @@ def createTeachers(inFile, outFile, divisions, gradeNumber):
         #Output data to the file for all users.
         staffDict = {}
         for row in reader:
+            # Confirm teacher email is in the school domain
+            if domain in row['Email 1']:
+                sEmail = row['Email 1']
+            elif domain in row['Email 2']:
+                sEmail = row['Email 2']
+            else:
+                continue
             new = defaultdict(dict)
             new['School_id'] = divisions[row['School Level']]
             new['Teacher_id'] = row['Person ID']
             new['Teacher_number'] = row['Person ID']
             new['State_teacher_id'] = ''
-            new['Teacher_email'] = row['Email 1']
+            new['Teacher_email'] = sEmail
             new['First_name'] = row['First Nick Name']
             new['Middle_name'] = row['Middle Name']
             new['Last_name'] = row['Last Name']
@@ -137,10 +166,17 @@ def createAdmins(inFile, outFile, divisions, gradeNumber):
         writer.writeheader()
         #Output data to the file for all users.
         for row in reader:
+            # Confirm teacher email is in the school domain
+            if domain in row['Email 1']:
+                sEmail = row['Email 1']
+            elif domain in row['Email 2']:
+                sEmail = row['Email 2']
+            else:
+                continue
             new = defaultdict(dict)
             new['School_id'] = divisions[row['School Level']]
             new['Staff_id'] = row['Person ID']
-            new['Admin_email'] = row['Email 1']
+            new['Admin_email'] = sEmail
             new['First_name'] = row['First Nick Name']
             new['Last_name'] = row['Last Name']
             new['Admin_title'] = row['Job Title']
@@ -162,8 +198,10 @@ def createSections(inFile, outFile, divisions, gradeNumber):
         #Output data to the file for all users.
         classesDict = dict()
         for row in reader:
-            # if not (row['Role'] == 'Primary Teacher' or
-                    # row['Role'] == "Teacher's Aide"): continue
+            # do not include those with role of 'Other'
+            if row['Person ID'] not in multiTeacher:
+                if row['Role'] == 'Other': continue
+            # Roles Primary Teacher, Additional Teacher, and Teacher's Aide
             if row['Internal Class ID'] not in classesDict:
                 new = defaultdict(dict)
                 new['School_id'] = divisions[row['School Level']]
@@ -235,18 +273,21 @@ def main():
     abrvSchool = schoolLevels()
     abrvGrade = gradeLevels()
     #Export files from Veracross in CSV format, UTF-8
+    sourceSchools = f'{inputs}/schoolsC.csv'
     sourceStudents = f'{inputs}/studentsC.csv'
     sourceTeachers = f'{inputs}/teachersC.csv'
     sourceAdmins = f'{inputs}/adminsC.csv'
     sourceSections = f'{inputs}/sectionsC.csv'
     sourceRosters = f'{inputs}/enrollmentsC.csv'
     #CSV files for upload into Clever
+    resultSchools = f'{results}/schoolsTest.csv'
     resultStudents = f'{results}/students.csv'
     resultTeachers = f'{results}/teachers.csv'
     resultAdmins = f'{results}/admins.csv'
     resultSections = f'{results}/sections.csv'
     resultEnrollments = f'{results}/enrollments.csv'
     #Run functions to create the files
+    #createSchools(sourceSchools,resultSchools,abrvSchool,abrvGrade)
     createStudents(sourceStudents, resultStudents, abrvSchool, abrvGrade)
     createTeachers(sourceTeachers, resultTeachers, abrvSchool, abrvGrade)
     createAdmins(sourceAdmins, resultAdmins, abrvSchool, abrvGrade)
@@ -258,3 +299,4 @@ def main():
 
 
 if __name__ == '__main__': main()
+
