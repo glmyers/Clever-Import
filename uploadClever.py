@@ -116,8 +116,8 @@ def createStudents(inFile, outFile, divisions, gradeNumber):
                 new['Contact_sis_id'] = row[f'PARENT {x}: Person ID']
                 new['Username'] = ''
                 new['Password'] = ''
-                new['Unweighted_gpa'] = row['GPA']
-                new['Weighted_gpa'] = row['WGPA']
+                new['Unweighted_gpa'] = ''
+                new['Weighted_gpa'] = ''
                 writer.writerow(new)
     return
 
