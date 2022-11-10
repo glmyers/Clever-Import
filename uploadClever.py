@@ -50,8 +50,7 @@ def gradeLevels():
 
 
 def level(checkRole):
-    STL = ['gmyers@tsdch.org','lsayre@tsdch.org',
-           'mdaniel@tsdch.org','alinares@tsdch.org','dcrain@tsdch.org']
+    STL = [] #List should contain the email address all School Tech Leads
     if checkRole in STL:
         return 'School Tech Lead'
     else:
