@@ -56,16 +56,6 @@ def level(checkRole):
     else:
         return ''
 
-'''
-def createSchools(inFile, outFile, divisions, gradeNumber):
-    with open(inFile, 'r') as dataIn, open(outFile, 'w') as dataOut:
-        reader = csv.DictReader(dataIn)
-        writer = csv.DictWriter(dataOut, fieldnames=fschools(),
-                                quoting=csv.QUOTE_MINIMAL)
-        #Put the header row of fields at the top of the output file.
-        writer.writeheader()
-    return
-'''
 
 def createStudents(inFile, outFile, divisions, gradeNumber):
     #Create a CSV export file by processing the existing data files.
@@ -282,14 +272,12 @@ def main():
     abrvSchool = schoolLevels()
     abrvGrade = gradeLevels()
     #Export files from Veracross in CSV format, UTF-8
-    sourceSchools = f'{inputs}/schoolsC.csv'
     sourceStudents = f'{inputs}/studentsC.csv'
     sourceTeachers = f'{inputs}/teachersC.csv'
     sourceStaff = f'{inputs}/staffC.csv'
     sourceSections = f'{inputs}/sectionsC.csv'
     sourceRosters = f'{inputs}/enrollmentsC.csv'
     #CSV files for upload into Clever
-    resultSchools = f'{results}/schoolsTest.csv'
     resultStudents = f'{results}/students.csv'
     resultTeachers = f'{results}/teachers.csv'
     resultStaff = f'{results}/staff.csv'
