@@ -61,12 +61,11 @@ def teachersFieldsC():
     return fields
 
 
-def adminsFieldsC():
-    #Required: 'School_id', 'Staff_id', 'Admin_email'
+def staffFieldsC():
+    #Required: 'School_id', 'Staff_id', 'Staff_email',
     #          'First_name', 'Last_name'
-    fields = ['School_id', 'Staff_id', 'Admin_email',
-              'First_name', 'Last_name', 'Admin_title',
-              'Username', 'Password', 'Role']
+    fields = ['School_id', 'Staff_id', 'Staff_email', 'First_name', 'Last_name',
+              'Department', 'Title', 'Username', 'Password','Role']
     return fields
 
 
@@ -107,8 +106,8 @@ def main():
     for field in teachersFieldsC():
         print(field)
     print()
-    print('Clever fields Admins File:')
-    print("Required: 'School_id', 'Staff_id', 'Admin_email', 'First_name', 'Last_name'")
+    print('Clever fields Staff File:')
+    print("Required: 'School_id', 'Staff_id', 'Staff_email', 'First_name', 'Last_name'")
     for field in adminsFieldsC():
         print(field)
     print()
