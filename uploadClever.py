@@ -23,15 +23,15 @@ from renameExports import vcxFiles
 #Import the fieldnames for the export files.
 from fieldList import studentsFieldsC as fstudents
 from fieldList import teachersFieldsC as fteachers
-from fieldList import adminsFieldsC as fadmins
+from fieldList import staffFieldsC as fstaff
 from fieldList import sectionsFieldsC as fsections
 from fieldList import enrollmentsFieldsC as fenrollments
 from fieldList import schoolsFieldsC as fschools
 #Domain for school email system
 domain = '@tsdch.org'
-# List of Person IDs of students who temporaroly are without parents..
+# List of students who temporaroly are without parents..
 noParents = ['']
-# List of Person IDs of teachers with role "Other" that actually teach the class.
+# List of teachers with role "Other" that actually teach the class.
 multiTeacher = ['']
 
 
@@ -47,6 +47,15 @@ def gradeLevels():
     'Grade 3':3, 'Grade 2':2, 'Grade 1':1, 'TK':'Prekindergarten', \
     'Kindergarten':'Kindergarten'}
     return gradesDict
+
+
+def level(checkRole):
+    STL = ['gmyers@tsdch.org','lsayre@tsdch.org',
+           'mdaniel@tsdch.org','alinares@tsdch.org','dcrain@tsdch.org']
+    if checkRole in STL:
+        return 'School Tech Lead'
+    else:
+        return ''
 
 '''
 def createSchools(inFile, outFile, divisions, gradeNumber):
@@ -116,8 +125,8 @@ def createStudents(inFile, outFile, divisions, gradeNumber):
                 new['Contact_sis_id'] = row[f'PARENT {x}: Person ID']
                 new['Username'] = ''
                 new['Password'] = ''
-                new['Unweighted_gpa'] = ''
-                new['Weighted_gpa'] = ''
+                new['Unweighted_gpa'] = row['GPA']
+                new['Weighted_gpa'] = row['WGPA']
                 writer.writerow(new)
     return
 
@@ -156,11 +165,11 @@ def createTeachers(inFile, outFile, divisions, gradeNumber):
     return
 
 
-def createAdmins(inFile, outFile, divisions, gradeNumber):
+def createStaff(inFile, outFile, divisions, gradeNumber):
     #Create a CSV export file by processing the existing data files.
     with open(inFile, 'r') as dataIn, open(outFile, 'w') as dataOut:
         reader = csv.DictReader(dataIn)
-        writer = csv.DictWriter(dataOut, fieldnames=fadmins(),
+        writer = csv.DictWriter(dataOut, fieldnames=fstaff(),
                                 quoting=csv.QUOTE_ALL)
         #Put the header row of fields at the top of the output file.
         writer.writeheader()
@@ -176,13 +185,14 @@ def createAdmins(inFile, outFile, divisions, gradeNumber):
             new = defaultdict(dict)
             new['School_id'] = divisions[row['School Level']]
             new['Staff_id'] = row['Person ID']
-            new['Admin_email'] = sEmail
+            new['Staff_email'] = sEmail
             new['First_name'] = row['First Nick Name']
             new['Last_name'] = row['Last Name']
-            new['Admin_title'] = row['Job Title']
+            new['Department'] = row['Department']
+            new['Title'] = row['Job Title']
             new['Username'] = ''
             new['Password'] = ''
-            new['Role'] = row['Profile Code']
+            new['Role'] = level(sEmail)
             writer.writerow(new)
     return
 
@@ -276,21 +286,21 @@ def main():
     sourceSchools = f'{inputs}/schoolsC.csv'
     sourceStudents = f'{inputs}/studentsC.csv'
     sourceTeachers = f'{inputs}/teachersC.csv'
-    sourceAdmins = f'{inputs}/adminsC.csv'
+    sourceStaff = f'{inputs}/staffC.csv'
     sourceSections = f'{inputs}/sectionsC.csv'
     sourceRosters = f'{inputs}/enrollmentsC.csv'
     #CSV files for upload into Clever
     resultSchools = f'{results}/schoolsTest.csv'
     resultStudents = f'{results}/students.csv'
     resultTeachers = f'{results}/teachers.csv'
-    resultAdmins = f'{results}/admins.csv'
+    resultStaff = f'{results}/staff.csv'
     resultSections = f'{results}/sections.csv'
     resultEnrollments = f'{results}/enrollments.csv'
     #Run functions to create the files
     #createSchools(sourceSchools,resultSchools,abrvSchool,abrvGrade)
     createStudents(sourceStudents, resultStudents, abrvSchool, abrvGrade)
     createTeachers(sourceTeachers, resultTeachers, abrvSchool, abrvGrade)
-    createAdmins(sourceAdmins, resultAdmins, abrvSchool, abrvGrade)
+    createStaff(sourceStaff, resultStaff, abrvSchool, abrvGrade)
     createSections(sourceSections, resultSections, abrvSchool, abrvGrade)
     createEnrollments(sourceRosters, resultEnrollments, abrvSchool, abrvGrade)
     print('Files are complete.')
@@ -299,4 +309,3 @@ def main():
 
 
 if __name__ == '__main__': main()
-
