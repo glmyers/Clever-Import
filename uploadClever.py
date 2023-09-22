@@ -14,6 +14,8 @@ file names. The path of their location is set using the 'results' variable.
 
 #Import code desired from the standard library.
 import csv
+import paramiko
+from dotenv import dotenv_values
 from sys import argv
 from pathlib import Path
 from getpass import getuser
@@ -264,6 +266,25 @@ def createEnrollments(inFile, outFile, divisions, gradeNumber):
     return
 
 
+def sendFile(studentsFile,teachersFile,staffFile,sectionsFile,enrollmentsFile):
+    host = 'sftp.clever.com'
+    port = 22
+    #This code assumes 'usernameClever' and 'passwordClever' are defined in a '.env' file.
+    secrets = dotenv_values('.env')
+    with paramiko.Transport((host, port)) as transport:
+        username = secrets['usernameClever']
+        password = secrets['passwordClever']
+        transport.connect(username = username, password = password)
+        with paramiko.SFTPClient.from_transport(transport) as sftp:
+            severpath = './'
+            sftp.put(studentsFile, './students.csv')
+            sftp.put(teachersFile, './teachers.csv')
+            sftp.put(staffFile, './staff.csv')
+            sftp.put(sectionsFile, './sections.csv')
+            sftp.put(enrollmentsFile, './enrollments.csv')
+    return
+
+
 def main():
     vcxFiles()
     print()
@@ -291,6 +312,10 @@ def main():
     createSections(sourceSections, resultSections, abrvSchool, abrvGrade)
     createEnrollments(sourceRosters, resultEnrollments, abrvSchool, abrvGrade)
     print('Files are complete.')
+    print()
+    #Upload the files to Clever via SFTP
+    sendFile(resultStudents,resultTeachers,resultStaff,resultSections,resultEnrollments)
+    print('Files uploaded.')
     print()
     return
 
