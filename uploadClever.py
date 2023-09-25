@@ -9,6 +9,9 @@ is set using the 'inputs' variable.
 Export file names should not be altered since Clever is expecting specific
 file names. The path of their location is set using the 'results' variable.
 
+This script rquires 'paramiko' and 'dotenv' be installed in Python (use pip).
+These are used to complete the SFTP upload of the result files.
+
 ****DO NOT CHANGE THE NAMES OF THE RESULT FILES.****
 '''
 
